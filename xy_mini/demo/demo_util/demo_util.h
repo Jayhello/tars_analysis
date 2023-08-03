@@ -7,4 +7,6 @@ namespace xy{
 
 void test_exception();
 
+void test_autoptr();
+
 }// xy
