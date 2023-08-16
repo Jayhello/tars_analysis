@@ -9,4 +9,8 @@ void test_exception();
 
 void test_autoptr();
 
+void test_monitor();
+
+void test_thread();
+
 }// xy
