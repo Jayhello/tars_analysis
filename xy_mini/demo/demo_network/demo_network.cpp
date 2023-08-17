@@ -7,16 +7,19 @@
 #include "network/xy_scoket.h"
 
 int main(){
-    xy::test_exception();
+    xy::test_scoket();
 
     return 0;
 }
 
 namespace xy{
 
-void test_exception(){
+    void test_scoket(){
     try{
-        throw TC_Socket_Exception("socket_abc");
+        TC_Socket ts;
+        ts.createSocket();
+        ts.connect("www.baidu.com");
+
     }catch (const std::exception& ex){
         std::cout << "ex: " << ex.what() << std::endl;
     }

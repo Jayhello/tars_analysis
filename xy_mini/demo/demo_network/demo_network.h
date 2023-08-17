@@ -5,6 +5,6 @@
 
 namespace xy{
 
-void test_exception();
+void test_scoket();
 
 }// xy
