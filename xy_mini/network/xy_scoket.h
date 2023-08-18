@@ -129,6 +129,12 @@ public:
     // 解析地址, 从字符串(ipv6或域名), 解析到in6_addr结构.
     static void parseAddr(const string &sAddr, struct in6_addr &stAddr);
 
+    static bool addressIsIPv6(const string& addr, bool def_value = false)
+    {
+    #define IPv6_ADDRESS_CHAR ':'
+        return (addr.find(IPv6_ADDRESS_CHAR) != string::npos) ? true : false;
+    #undef IPv6_ADDRESS_CHAR
+    }
     // 解析地址, 从字符串(ip或域名)端口, 解析到sockaddr_in结构.
     static void parseAddrWithPort(const string &host, int port, struct sockaddr_in &addr);
 

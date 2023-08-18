@@ -9,6 +9,7 @@
 #include "util/xy_monitor.h"
 #include "util/xy_thread.h"
 #include "util/xy_common.h"
+#include "util/xy_port.h"
 
 int main() {
 //    xy::test_exception();
@@ -98,6 +99,7 @@ void test_thread() {
     mt.terminate();
     mt.getThreadControl().join();
 
+    TC_Port::getpid();
 }
 
 
