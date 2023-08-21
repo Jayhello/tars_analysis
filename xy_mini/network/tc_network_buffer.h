@@ -11,6 +11,7 @@
 #include <memory>
 #include "xy_scoket.h"
 #include "util/xy_common.h"
+#include "util/xy_autoptr.h"
 
 namespace xy {
 
