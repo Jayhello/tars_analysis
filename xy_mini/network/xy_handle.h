@@ -14,6 +14,8 @@
 #include "tc_network_buffer.h"
 #include "util/xy_thread.h"
 #include "xy_epoller.h"
+#include "xy_bind_adapter.h"
+#include "xy_epoll_server.h"
 
 
 namespace xy{
@@ -152,7 +154,7 @@ protected:
      * @param stRecvData: 接收到的数据
      * @param stRecvData: received data
      */
-    virtual void handleTimeout(const shared_ptr<TC_EpollServer::RecvContext> &data);
+    virtual void handleTimeout(const shared_ptr<RecvContext> &data);
 
     /**
      * 处理连接关闭通知，包括
@@ -162,7 +164,7 @@ protected:
      * 3.close by timeout or overload
      * @param stRecvData:
      */
-    virtual void handleClose(const shared_ptr<TC_EpollServer::RecvContext> &data);
+    virtual void handleClose(const shared_ptr<RecvContext> &data);
 
     /**
      * 处理overload数据 即数据队列中长度已经超过允许值
@@ -172,7 +174,7 @@ protected:
      * @param stRecvData: 接收到的数据
      * @param stRecvData: received data
      */
-    virtual void handleOverload(const shared_ptr<TC_EpollServer::RecvContext> &data);
+    virtual void handleOverload(const shared_ptr<RecvContext> &data);
 
     /**
      * 处理异步回调队列

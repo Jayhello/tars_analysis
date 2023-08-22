@@ -14,11 +14,16 @@
 #include <functional>
 #include "tc_network_buffer.h"
 #include "xy_epoller.h"
+#include "xy_handle.h"
 #include "util/xy_thread_queue.h"
+#include "util/xy_monitor.h"
+#include "xy_epoll_server.h"
 
 using namespace std;
 
 namespace xy {
+
+using TC_EpollServer::ConnStatus;
 
 enum EM_CLOSE_T {
     /**Client active shutdown*/

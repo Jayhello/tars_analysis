@@ -15,6 +15,10 @@
 #include "tc_network_buffer.h"
 #include "util/xy_thread.h"
 #include "xy_epoller.h"
+#include "xy_connection.h"
+#include "xy_netthread.h"
+#include "xy_bind_adapter.h"
+#include "xy_epoll_server.h"
 
 using namespace std;
 
