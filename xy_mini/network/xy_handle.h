@@ -290,4 +290,6 @@ protected:
 
 };
 
+typedef TC_AutoPtr<Handle> HandlePtr;
+
 } // xy

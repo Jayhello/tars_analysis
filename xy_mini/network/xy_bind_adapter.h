@@ -14,6 +14,7 @@
 #include <functional>
 #include "tc_network_buffer.h"
 #include "xy_epoller.h"
+#include "xy_clientsocket.h"
 #include "xy_handle.h"
 #include "util/xy_thread_queue.h"
 #include "util/xy_monitor.h"
@@ -152,6 +153,8 @@ typedef TC_ThreadQueue<shared_ptr<RecvContext>> recv_queue;
 //	typedef TC_CasQueue<shared_ptr<SendContext>> send_queue;
 typedef TC_ThreadQueue<shared_ptr<SendContext>> send_queue;
 typedef recv_queue::queue_type recv_queue_type;
+
+using auth_process_wrapper_functor = std::function<bool (Connection *c, const shared_ptr<RecvContext> &recv )>;
 
 // 服务端口管理,监听socket信息
 // Service port management, listening for socket information

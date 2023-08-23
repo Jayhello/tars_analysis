@@ -30,7 +30,7 @@ TC_EpollServer::TC_EpollServer(unsigned int iNetThreadNum)
     _notify.add(_notify.notifyFd());
 
     for (size_t i = 0; i < _netThreadNum; ++i) {
-        TC_EpollServer::NetThread *netThreads = new TC_EpollServer::NetThread(this, i);
+        NetThread *netThreads = new NetThread(this, i);
         _netThreads.push_back(netThreads);
     }
 }
@@ -314,7 +314,7 @@ int TC_EpollServer::bind(BindAdapterPtr &lsPtr) {
 }
 
 void TC_EpollServer::addConnection(TC_EpollServer::Connection *cPtr, int fd, TC_EpollServer::CONN_TYPE iType) {
-    TC_EpollServer::NetThread *netThread = getNetThreadOfFd(fd);
+    NetThread *netThread = getNetThreadOfFd(fd);
 
     if (iType == TCP_CONNECTION) {
         netThread->addTcpConnection(cPtr);
@@ -333,7 +333,7 @@ void TC_EpollServer::startHandle() {
             _handleStarted = true;
 
             for (auto &bindAdapter : _bindAdapters) {
-                const vector<TC_EpollServer::HandlePtr> &hds = bindAdapter->getHandles();
+                const vector<HandlePtr> &hds = bindAdapter->getHandles();
 
                 for (uint32_t i = 0; i < hds.size(); ++i) {
                     if (!hds[i]->isAlive()) {
@@ -403,7 +403,7 @@ void TC_EpollServer::createEpoll() {
     }
 }
 
-TC_EpollServer::BindAdapterPtr TC_EpollServer::getBindAdapter(const string &sName) {
+BindAdapterPtr TC_EpollServer::getBindAdapter(const string &sName) {
     auto it = _listeners.begin();
 
     while (it != _listeners.end()) {
@@ -416,18 +416,18 @@ TC_EpollServer::BindAdapterPtr TC_EpollServer::getBindAdapter(const string &sNam
     return NULL;
 }
 
-vector<TC_EpollServer::BindAdapterPtr> TC_EpollServer::getBindAdapters() {
+vector<BindAdapterPtr> TC_EpollServer::getBindAdapters() {
     return this->_bindAdapters;
 }
 
-void TC_EpollServer::close(const shared_ptr<TC_EpollServer::RecvContext> &data) {
-    TC_EpollServer::NetThread *netThread = getNetThreadOfFd(data->fd());
+void TC_EpollServer::close(const shared_ptr<RecvContext> &data) {
+    NetThread *netThread = getNetThreadOfFd(data->fd());
 
     netThread->close(data);
 }
 
 void TC_EpollServer::send(const shared_ptr<SendContext> &data) {
-    TC_EpollServer::NetThread *netThread = getNetThreadOfFd(data->fd());
+    NetThread *netThread = getNetThreadOfFd(data->fd());
 
     netThread->send(data);
 }
