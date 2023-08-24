@@ -541,6 +541,10 @@ int64_t TC_Common::now2ms() {
     return tv.tv_sec * (int64_t) 1000 + tv.tv_usec / 1000;
 }
 
+int64_t TC_Common::now(){
+    return now2ms() / 1000;
+}
+
 int64_t TC_Common::now2us() {
     struct timeval tv;
 

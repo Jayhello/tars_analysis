@@ -313,7 +313,7 @@ int TC_EpollServer::bind(BindAdapterPtr &lsPtr) {
     return s.getfd();
 }
 
-void TC_EpollServer::addConnection(TC_EpollServer::Connection *cPtr, int fd, TC_EpollServer::CONN_TYPE iType) {
+void TC_EpollServer::addConnection(Connection *cPtr, int fd, TC_EpollServer::CONN_TYPE iType) {
     NetThread *netThread = getNetThreadOfFd(fd);
 
     if (iType == TCP_CONNECTION) {
@@ -348,7 +348,7 @@ void TC_EpollServer::startHandle() {
 void TC_EpollServer::stopThread() {
     if (!this->isMergeHandleNetThread()) {
         for (auto &bindAdapter : _bindAdapters) {
-            const vector<TC_EpollServer::HandlePtr> &hds = bindAdapter->getHandles();
+            const vector<HandlePtr> &hds = bindAdapter->getHandles();
 
             //把处理线程都唤醒
             if (!bindAdapter->isQueueMode()) {

@@ -30,6 +30,9 @@
 
 using namespace std;
 
+#define TNOW     TC_Common::now()
+#define TNOWMS   TC_Common::now2ms()
+
 namespace xy {
 
 class TC_Common {
@@ -374,6 +377,8 @@ public:
     * @return string time string in (%H%M%S) format
     */
     static string nowtime2str();
+
+    static int64_t now();
 
     /**
      * @brief  获取当前时间的的毫秒数.

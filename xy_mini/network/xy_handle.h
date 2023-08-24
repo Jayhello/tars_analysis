@@ -11,7 +11,7 @@
 #include <list>
 #include <algorithm>
 #include <functional>
-#include "tc_network_buffer.h"
+#include "xy_network_buffer.h"
 #include "util/xy_thread.h"
 #include "xy_epoller.h"
 #include "xy_bind_adapter.h"

@@ -3,7 +3,7 @@
 //
 
 #include "xy_http.h"
-#include "tc_network_buffer.h"
+#include "xy_network_buffer.h"
 #include <string.h>
 #include "util/xy_port.h"
 

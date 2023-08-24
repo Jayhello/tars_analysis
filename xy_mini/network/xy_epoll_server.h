@@ -12,7 +12,7 @@
 #include <list>
 #include <algorithm>
 #include <functional>
-#include "tc_network_buffer.h"
+#include "xy_network_buffer.h"
 #include "xy_epoller.h"
 #include "xy_connection.h"
 #include "xy_netthread.h"
