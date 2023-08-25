@@ -19,6 +19,7 @@
 #include "xy_bind_adapter.h"
 #include "util/xy_thread_queue.h"
 #include "util/xy_monitor.h"
+#include "util/xy_logger.h"
 
 using namespace std;
 

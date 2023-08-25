@@ -6,10 +6,11 @@
 namespace xy{
 
 BindAdapter::BindAdapter(TC_EpollServer *pEpollServer)
-: _pReportQueue(NULL)
-, _pReportConRate(NULL)
-, _pReportTimeoutNum(NULL)
-, _pEpollServer(pEpollServer)
+:
+// _pReportQueue(NULL)
+//, _pReportConRate(NULL)
+//, _pReportTimeoutNum(NULL)
+_pEpollServer(pEpollServer)
 ,  _pf(echo_protocol)
 , _hf(echo_header_filter)
 , _name("")

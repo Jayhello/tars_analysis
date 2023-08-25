@@ -24,7 +24,7 @@ using namespace std;
 
 namespace xy {
 
-using TC_EpollServer::ConnStatus;
+using ConnStatus = TC_EpollServer::ConnStatus;
 
 enum EM_CLOSE_T {
     /**Client active shutdown*/
@@ -41,6 +41,8 @@ using close_functor = std::function<void(void *, EM_CLOSE_T)>;
 class BindAdapter;
 
 typedef TC_AutoPtr<BindAdapter> BindAdapterPtr;
+
+class RecvContext;
 
 /**
  * 发送包的上下文
@@ -700,9 +702,9 @@ public:
 
     //统计上报的对象
     //Count reporting objects
-    PropertyReport *_pReportQueue = NULL;
-    PropertyReport *_pReportConRate = NULL;
-    PropertyReport *_pReportTimeoutNum = NULL;
+//    PropertyReport *_pReportQueue = NULL;
+//    PropertyReport *_pReportConRate = NULL;
+//    PropertyReport *_pReportTimeoutNum = NULL;
 
 protected:
     friend class TC_EpollServer;

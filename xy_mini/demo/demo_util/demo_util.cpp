@@ -10,12 +10,22 @@
 #include "util/xy_thread.h"
 #include "util/xy_common.h"
 #include "util/xy_port.h"
+#include "util/xy_timeprovider.h"
+#include "util/xy_spin_lock.h"
+#include "util/xy_file.h"
+#include "util/xy_cas_queue.h"
+#include "util/xy_logger.h"
 
 int main() {
 //    xy::test_exception();
 //    xy::test_autoptr();
 //    xy::test_monitor();
-    xy::test_thread();
+//    xy::test_thread();
+//    xy::test_time_provider();
+//    xy::test_spin_lock();
+//    xy::test_file();
+//    xy::test_cas_queue();
+    xy::test_logger();
 
     return 0;
 }
@@ -102,5 +112,37 @@ void test_thread() {
     TC_Port::getpid();
 }
 
+void test_time_provider(){
+    std::cout << TNOW << std::endl;
+}
+
+void test_spin_lock(){
+    TC_SpinLock lk;
+    std::cout << "spin_lock_ending..." << std::endl;
+}
+
+void test_file(){
+    string path = "/mnt/e/work_note/item_order_w/gen_pid_gift/static_pid_gift.sh";
+    cout << "size: " << TC_File::getFileSize(path) << endl;
+}
+
+void test_cas_queue(){
+    TC_CasQueue<int> que;
+    std::cout << "cas_queue_ending..." << std::endl;
+}
+
+void test_logger(){
+    TC_LoggerThreadGroup g_group;
+    TC_RollLogger        g_logger;
+    TC_DayLogger         g_dlogger;
+    g_group.start(1);
+
+    g_logger.init("./debug", 1024 * 1024, 10);
+    g_logger.modFlag(TC_RollLogger::HAS_LEVEL | TC_RollLogger::HAS_PID, true);
+    g_logger.setLogLevel(1);
+    g_logger.setupThread(&g_group);
+
+    g_logger.debug() << "start test: " << std::this_thread::get_id() << endl;
+}
 
 }// xy

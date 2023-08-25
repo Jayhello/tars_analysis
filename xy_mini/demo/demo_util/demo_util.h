@@ -13,4 +13,14 @@ void test_monitor();
 
 void test_thread();
 
+void test_time_provider();
+
+void test_spin_lock();
+
+void test_file();
+
+void test_cas_queue();
+
+void test_logger();
+
 }// xy

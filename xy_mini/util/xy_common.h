@@ -30,8 +30,8 @@
 
 using namespace std;
 
-#define TNOW     TC_Common::now()
-#define TNOWMS   TC_Common::now2ms()
+//#define TNOW     TC_Common::now()
+//#define TNOWMS   TC_Common::now2ms()
 
 namespace xy {
 

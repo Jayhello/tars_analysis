@@ -8,6 +8,7 @@
 #include "network/xy_clientsocket.h"
 #include "network/xy_http.h"
 #include "util/xy_common.h"
+#include "util/xy_logger.h"
 
 int main(){
 //    xy::test_scoket();
