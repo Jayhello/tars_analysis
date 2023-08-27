@@ -12,7 +12,8 @@
 
 int main(){
 //    xy::test_scoket();
-    xy::test_post();
+//    xy::test_post();
+    xy::test_client_scoket();
 
     return 0;
 }
@@ -83,5 +84,20 @@ int test_post(){
     return iRet;
 }
 
+void test_client_scoket(){
+    int ret = 0;
+    try{
+        TC_TCPClient client("0.0.0.0", 8084, 2000);
+        ret = client.send("abcd", 4);
+
+        std::size_t len = 0;
+        string sData(100, '\0');
+        ret = client.recv(&sData[0], len);
+        cout << "recv_ret: " << ret << ", len: " << len << ", data: " << sData << endl;
+
+    } catch (exception &ex) {
+        cout << "client_ex: " << ex.what() << endl;
+    }
+}
 
 }// xy

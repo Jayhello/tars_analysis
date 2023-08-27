@@ -8,18 +8,13 @@
 #include "network/xy_epoll_server.h"
 #include "util/xy_common.h"
 
-//int main() {
-//
-//
-//    return 0;
-//}
+int main() {
+    xy::test_epoll_server();
 
-namespace xy {
-
-void test_epoll_server() {
-
+    return 0;
 }
 
+namespace xy {
 
 TC_LoggerThreadGroup g_group;
 TC_RollLogger g_logger;
@@ -32,19 +27,11 @@ class MyServer;
 */
 class HttpHandle : public Handle {
 public:
-
-    /**
-     * 初始化
-     */
     virtual void initialize() {
         g_logger.debug() << "HttpHandle::initialize: " << std::this_thread::get_id() << endl;
         cout << "HttpHandle::initialize: " << std::this_thread::get_id() << endl;
-
     }
 
-    /**
-     *
-     */
     virtual void handle(const shared_ptr<RecvContext> &data) {
         try {
 
@@ -113,28 +100,20 @@ TC_NetWorkBuffer::PACKET_TYPE parseEcho(TC_NetWorkBuffer &in, vector<char> &out)
     catch (exception &ex) {
         return TC_NetWorkBuffer::PACKET_ERR;
     }
-
     return TC_NetWorkBuffer::PACKET_LESS;             //表示收到的包不完全
 }
 
 
 class SocketHandle : public Handle {
 public:
-
-    /**
-     * 初始化
-     */
     virtual void initialize() {
         g_logger.debug() << "SocketHandle::initialize: " << std::this_thread::get_id() << endl;
         cout << "SocketHandle::initialize: " << std::this_thread::get_id() << endl;
     }
-
-    /**
-     *
-     */
     virtual void handle(const shared_ptr<RecvContext> &data) {
         try {
             cout << "SocketHandle::handle : " << data->ip() << ":" << data->port() << endl;
+            cout << "recv_data: " << data.
 
             shared_ptr<SendContext> send = data->createSendContext();
             send->buffer()->setBuffer(data->buffer());
@@ -146,11 +125,6 @@ public:
             close(data);
         }
     }
-
-    /**
-     * [handleClose description]
-     * @param data [description]
-     */
     virtual void handleClose(const shared_ptr<RecvContext> &data) {
         try {
 
@@ -162,14 +136,9 @@ public:
         }
     }
 
-    /**
-     * [heartbeat description]
-     */
     virtual void heartbeat() {
     }
-
 protected:
-
 };
 
 
@@ -245,9 +214,8 @@ protected:
     TC_EpollServer *_epollServer;
 };
 
-} // xy
 
-int main(int argc, char **argv) {
+void test_epoll_server() {
     try {
 #if TARGET_PLATFORM_LINUX || TARGET_PLATFORM_IOS
         xy::TC_Common::ignorePipe();
@@ -269,3 +237,4 @@ int main(int argc, char **argv) {
     cout << "HttpServer::run http server thread exit." << endl;
 }
 
+} // xy

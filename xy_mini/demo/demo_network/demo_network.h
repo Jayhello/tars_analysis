@@ -12,4 +12,6 @@ void test_scoket();
 
 int test_post();
 
+void test_client_scoket();
+
 }// xy
