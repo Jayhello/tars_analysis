@@ -113,7 +113,7 @@ public:
     virtual void handle(const shared_ptr<RecvContext> &data) {
         try {
             cout << "SocketHandle::handle : " << data->ip() << ":" << data->port() << endl;
-            cout << "recv_data: " << data.
+            cout << "recv_data: " << data->buffer().data() << endl;
 
             shared_ptr<SendContext> send = data->createSendContext();
             send->buffer()->setBuffer(data->buffer());
