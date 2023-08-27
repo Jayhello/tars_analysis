@@ -3,6 +3,9 @@
 //
 
 #include "xy_netthread.h"
+#include "xy_bind_adapter.h"
+#include "xy_handle.h"
+#include "xy_epoll_server.h"
 
 namespace xy {
 

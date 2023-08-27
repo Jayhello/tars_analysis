@@ -14,9 +14,7 @@
 #include "xy_network_buffer.h"
 #include "util/xy_thread.h"
 #include "xy_epoller.h"
-#include "xy_bind_adapter.h"
-#include "xy_epoll_server.h"
-
+#include "xy_net_comm.h"
 
 namespace xy{
 

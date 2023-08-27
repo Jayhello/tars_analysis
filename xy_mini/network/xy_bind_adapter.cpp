@@ -3,7 +3,17 @@
 //
 
 #include "xy_bind_adapter.h"
+#include "xy_epoll_server.h"
+
 namespace xy{
+
+uint32_t SendContext::uid() const { return _context->uid(); }
+
+int SendContext::fd() const { return _context->fd(); }
+
+const string& SendContext::ip() const { return _context->ip(); }
+
+uint16_t SendContext::port() const { return _context->port(); }
 
 BindAdapter::BindAdapter(TC_EpollServer *pEpollServer)
 :
@@ -356,6 +366,16 @@ int BindAdapter::getNowConnection() const
 vector<ConnStatus> BindAdapter::getConnStatus()
 {
     return _pEpollServer->getConnStatus(_s.getfd());
+}
+
+HandlePtr BindAdapter::getHandle(size_t index) {
+    assert(index <= _iHandleNum);
+    assert(getEpollServer()->isMergeHandleNetThread());
+    return _handles[index];
+}
+
+NetThread* BindAdapter::getNetThreadOfFd(int fd) const{
+    return _pEpollServer->getNetThreadOfFd(fd);
 }
 
 void BindAdapter::setProtocol(const TC_NetWorkBuffer::protocol_functor &pf, int iHeaderLen, const header_filter_functor &hf)

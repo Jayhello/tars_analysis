@@ -16,13 +16,23 @@
 #include "util/xy_thread.h"
 #include "xy_epoller.h"
 #include "xy_connection.h"
-#include "xy_netthread.h"
-#include "xy_bind_adapter.h"
-#include "xy_epoll_server.h"
+#include "xy_net_comm.h"
 
 using namespace std;
 
 namespace xy {
+
+//class TC_EpollServer;
+//class ConnStatus;
+//
+//class BindAdapter;
+//typedef TC_AutoPtr<BindAdapter> BindAdapterPtr;
+//
+//class RecvContext;
+//class SendContext;
+//
+//class Connection;
+//class ConnectionList;
 
 class NetThread : public TC_Thread, public TC_HandleBase {
 public:
@@ -116,7 +126,7 @@ public:
      *
      * @return vector<TC_EpollServer::ConnStatus>
      */
-    vector<TC_EpollServer::ConnStatus> getConnStatus(int lfd);
+    vector<ConnStatus> getConnStatus(int lfd);
 
     /**
      * 获取连接数

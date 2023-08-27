@@ -3,6 +3,9 @@
 //
 
 #include "xy_connection.h"
+#include "xy_bind_adapter.h"
+#include "xy_handle.h"
+#include "xy_epoll_server.h"
 
 namespace xy {
 
@@ -706,8 +709,8 @@ void ConnectionList::checkTimeout(time_t iCurTime) {
     }
 }
 
-vector<TC_EpollServer::ConnStatus> ConnectionList::getConnStatus(int lfd) {
-    vector<TC_EpollServer::ConnStatus> v;
+vector<ConnStatus> ConnectionList::getConnStatus(int lfd) {
+    vector<ConnStatus> v;
 
     TC_LockT<TC_ThreadMutex> lock(_mutex);
 

@@ -8,11 +8,11 @@
 #include "network/xy_epoll_server.h"
 #include "util/xy_common.h"
 
-int main() {
-
-
-    return 0;
-}
+//int main() {
+//
+//
+//    return 0;
+//}
 
 namespace xy {
 
@@ -22,14 +22,14 @@ void test_epoll_server() {
 
 
 TC_LoggerThreadGroup g_group;
-TC_RollLogger        g_logger;
-TC_DayLogger         g_dlogger;
+TC_RollLogger g_logger;
+TC_DayLogger g_dlogger;
 
 class MyServer;
 
 /**
- * 处理类, 每个处理线程一个对象
- */
+* 处理类, 每个处理线程一个对象
+*/
 class HttpHandle : public Handle {
 public:
 
@@ -45,7 +45,7 @@ public:
     /**
      *
      */
-    virtual void handle(const shared_ptr<TC_EpollServer::RecvContext> &data) {
+    virtual void handle(const shared_ptr<RecvContext> &data) {
         try {
 
             g_logger.debug() << "HttpHandle::handle : " << data->ip() << ":" << data->port() << endl;
@@ -60,7 +60,7 @@ public:
 
             string buffer = response.encode();
 
-            shared_ptr<TC_EpollServer::SendContext> send = data->createSendContext();
+            shared_ptr<SendContext> send = data->createSendContext();
             send->buffer()->assign(buffer.c_str(), buffer.size());
 
             sendResponse(send);
@@ -76,7 +76,7 @@ public:
      * [handleClose description]
      * @param data [description]
      */
-    virtual void handleClose(const shared_ptr<TC_EpollServer::RecvContext> &data) {
+    virtual void handleClose(const shared_ptr<RecvContext> &data) {
         try {
 
             g_logger.debug() << "HttpHandle::handleClose : " << data->ip() << ":" << data->port() << endl;
@@ -103,7 +103,7 @@ protected:
 };
 
 TC_NetWorkBuffer::PACKET_TYPE parseEcho(TC_NetWorkBuffer &in, vector<char> &out) {
-    Connection * c = (Connection *) in.getConnection();
+    Connection *c = (Connection *) in.getConnection();
     cout << c->getIp() << endl;
     try {
         out = in.getBuffers();
@@ -185,7 +185,7 @@ public:
 
         g_logger.init("./debug", 1024 * 1024, 10);
         g_logger.modFlag(TC_RollLogger::HAS_LEVEL | TC_RollLogger::HAS_PID, true);
-        g_logger.setLogLevel(5);
+        g_logger.setLogLevel(1);
         g_logger.setupThread(&g_group);
 
         _epollServer->setLocalLogger(&g_logger);
@@ -245,26 +245,27 @@ protected:
     TC_EpollServer *_epollServer;
 };
 
-    int main(int argc, char **argv) {
-        try {
+} // xy
+
+int main(int argc, char **argv) {
+    try {
 #if TARGET_PLATFORM_LINUX || TARGET_PLATFORM_IOS
-            TC_Common::ignorePipe();
+        xy::TC_Common::ignorePipe();
 #endif
-            MyServer server;
+        xy::MyServer server;
 
-            server.initialize();
+        server.initialize();
 
-            server.bindHttp("tcp -h 0.0.0.0 -p 8083 -t 60000");
-            server.bindSocket("tcp -h 0.0.0.0 -p 8084 -t 60000");
+        server.bindHttp("tcp -h 0.0.0.0 -p 8083 -t 60000");
+        server.bindSocket("tcp -h 0.0.0.0 -p 8084 -t 60000");
 
-            server.waitForShutdown();
+        server.waitForShutdown();
 
-        }
-        catch (exception &ex) {
-            cerr << "HttpServer::run ex:" << ex.what() << endl;
-        }
-
-        cout << "HttpServer::run http server thread exit." << endl;
+    }
+    catch (exception &ex) {
+        cerr << "HttpServer::run ex:" << ex.what() << endl;
     }
 
-} // xy
+    cout << "HttpServer::run http server thread exit." << endl;
+}
+

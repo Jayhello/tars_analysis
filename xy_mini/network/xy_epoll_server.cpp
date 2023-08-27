@@ -3,6 +3,13 @@
 //
 
 #include "xy_epoll_server.h"
+#include <fcntl.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <net/if.h>
+#include <netinet/tcp.h>
+#include <sys/socket.h>
+#include "xy_handle.h"
 
 namespace xy {
 
@@ -313,7 +320,7 @@ int TC_EpollServer::bind(BindAdapterPtr &lsPtr) {
     return s.getfd();
 }
 
-void TC_EpollServer::addConnection(Connection *cPtr, int fd, TC_EpollServer::CONN_TYPE iType) {
+void TC_EpollServer::addConnection(Connection *cPtr, int fd, CONN_TYPE iType) {
     NetThread *netThread = getNetThreadOfFd(fd);
 
     if (iType == TCP_CONNECTION) {
@@ -456,10 +463,10 @@ void TC_EpollServer::error(const string &s) const {
     }
 }
 
-vector<TC_EpollServer::ConnStatus> TC_EpollServer::getConnStatus(int lfd) {
-    vector<TC_EpollServer::ConnStatus> vConnStatus;
+vector<ConnStatus> TC_EpollServer::getConnStatus(int lfd) {
+    vector<ConnStatus> vConnStatus;
     for (size_t i = 0; i < _netThreads.size(); ++i) {
-        vector<TC_EpollServer::ConnStatus> tmp = _netThreads[i]->getConnStatus(lfd);
+        vector<ConnStatus> tmp = _netThreads[i]->getConnStatus(lfd);
         for (size_t k = 0; k < tmp.size(); ++k) {
             vConnStatus.push_back(tmp[k]);
         }

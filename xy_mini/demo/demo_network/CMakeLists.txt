@@ -9,3 +9,9 @@ target_link_libraries(demo_network
         xy_tars_net_lib
         )
 
+add_executable(demo_epoll_server demo_epoll_server.cpp)
+target_link_libraries(demo_epoll_server
+        xy_tars_util_lib
+        xy_tars_net_lib
+        )
+

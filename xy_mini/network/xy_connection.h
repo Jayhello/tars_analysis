@@ -13,17 +13,15 @@
 #include <algorithm>
 #include <functional>
 #include "xy_network_buffer.h"
-#include "xy_netthread.h"
-#include "xy_bind_adapter.h"
-#include "xy_epoll_server.h"
 #include <cassert>
 #include <iostream>
+#include "xy_net_comm.h"
+#include "util/xy_thread_mutex.h"
 
 using namespace std;
 
 namespace xy {
 
-using TC_EpollServer::ConnStatus;
 
 class Connection {
 public:
@@ -201,6 +199,7 @@ public:
     void close();
 
     friend class NetThread;
+    friend class BindAdapter;
 
 protected:
 
@@ -455,7 +454,7 @@ public:
      * @param lfd
      * @return vector<TC_EpollServer::ConnStatus>
      */
-    vector<TC_EpollServer::ConnStatus> getConnStatus(int lfd);
+    vector<ConnStatus> getConnStatus(int lfd);
 
     /**
      * 获取某一个连接

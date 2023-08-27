@@ -17,6 +17,7 @@
 #include "xy_connection.h"
 #include "xy_netthread.h"
 #include "xy_bind_adapter.h"
+#include "xy_net_comm.h"
 #include "util/xy_thread_queue.h"
 #include "util/xy_monitor.h"
 #include "util/xy_logger.h"
@@ -26,19 +27,17 @@ using namespace std;
 namespace xy {
 
 /**
- * 定义协议解析接口的操作对象
- * 注意必须是线程安全的或是可以重入的
- * Define the Operating Object of the Protocol Resolution Interface
- * Note that it must be thread safe or reentrant
+ * 链接状态
+ * Connection state
  */
-typedef std::function<TC_NetWorkBuffer::PACKET_TYPE(TC_NetWorkBuffer::PACKET_TYPE,
-                                                    vector<char> &)> header_filter_functor;
-
-enum {
-    /**Empty connection timeout (ms)*/
-    MIN_EMPTY_CONN_TIMEOUT = 2 * 1000,    /*空链接超时时间(ms)*/
-    /**The size of received buffer of the default data*/
-    DEFAULT_RECV_BUFFERSIZE = 64 * 1024    /*缺省数据接收buffer的大小*/
+struct ConnStatus{
+    string          ip;
+    int32_t         uid;
+    uint16_t        port;
+    int             timeout;
+    int             iLastRefreshTime;
+    size_t          recvBufferSize;
+    size_t          sendBufferSize;
 };
 
 class TC_EpollServer : public TC_HandleBase {
@@ -52,27 +51,6 @@ public:
         EM_SERVER_CLOSE = 1,        //服务端业务主动调用close关闭连接,或者框架因某种异常主动关闭连接
         /**Connection timed out, server actively closed*/
         EM_SERVER_TIMEOUT_CLOSE = 2  //连接超时了，服务端主动关闭
-    };
-
-    //定义加入到网络线程的fd类别
-    //Define the FD categories added to network threads
-    enum CONN_TYPE {
-        TCP_CONNECTION = 0,
-        UDP_CONNECTION = 1,
-    };
-
-    /**
-	 * 链接状态
-     * Connection state
-	 */
-    struct ConnStatus{
-        string          ip;
-        int32_t         uid;
-        uint16_t        port;
-        int             timeout;
-        int             iLastRefreshTime;
-        size_t          recvBufferSize;
-        size_t          sendBufferSize;
     };
 
 public:

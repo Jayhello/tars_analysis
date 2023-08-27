@@ -15,30 +15,21 @@
 #include "xy_network_buffer.h"
 #include "xy_epoller.h"
 #include "xy_clientsocket.h"
-#include "xy_handle.h"
 #include "util/xy_thread_queue.h"
 #include "util/xy_monitor.h"
-#include "xy_epoll_server.h"
+#include "xy_handle.h"
 
 using namespace std;
 
 namespace xy {
 
-using ConnStatus = TC_EpollServer::ConnStatus;
-
-enum EM_CLOSE_T {
-    /**Client active shutdown*/
-    EM_CLIENT_CLOSE = 0,         //客户端主动关闭
-    /**The service-side business proactively calls 'close' to close the connection,
-     * or the framework proactively closes the connection due to an exception.*/
-    EM_SERVER_CLOSE = 1,        //服务端业务主动调用close关闭连接,或者框架因某种异常主动关闭连接
-    /**Connection timed out, server actively closed*/
-    EM_SERVER_TIMEOUT_CLOSE = 2  //连接超时了，服务端主动关闭
-};
+class ConnStatus;
 
 using close_functor = std::function<void(void *, EM_CLOSE_T)>;
 
 class BindAdapter;
+
+class RecvContext;
 
 typedef TC_AutoPtr<BindAdapter> BindAdapterPtr;
 
@@ -62,13 +53,13 @@ public:
 
     char cmd() const { return _cmd; }
 
-    uint32_t uid() const { return _context->uid(); }
+    uint32_t uid()const;
 
-    int fd() const { return _context->fd(); }
+    int fd() const;
 
-    const string &ip() const { return _context->ip(); }
+    const string &ip()const;
 
-    uint16_t port() const { return _context->port(); }
+    uint16_t port() const;
 
     friend class RecvContext;
 
@@ -150,10 +141,6 @@ protected:
     int64_t _recvTimeStamp;  /**接收到数据的时间*/
 };
 
-//	typedef TC_CasQueue<shared_ptr<RecvContext>> recv_queue;
-typedef TC_ThreadQueue<shared_ptr<RecvContext>> recv_queue;
-//	typedef TC_CasQueue<shared_ptr<SendContext>> send_queue;
-typedef TC_ThreadQueue<shared_ptr<SendContext>> send_queue;
 typedef recv_queue::queue_type recv_queue_type;
 
 using auth_process_wrapper_functor = std::function<bool (Connection *c, const shared_ptr<RecvContext> &recv )>;
@@ -461,7 +448,7 @@ public:
      * @param fd
      * @return
      */
-    inline NetThread *getNetThreadOfFd(int fd) const { return _pEpollServer->getNetThreadOfFd(fd); }
+    NetThread *getNetThreadOfFd(int fd)const;
 
     /**
      * 注册协议解析器
@@ -596,11 +583,7 @@ public:
      * @param index
      * @return
      */
-    HandlePtr getHandle(size_t index) {
-        assert(index <= _iHandleNum);
-        assert(getEpollServer()->isMergeHandleNetThread());
-        return _handles[index];
-    }
+    HandlePtr getHandle(size_t index);
 
     /*
      * 设置服务端积压缓存的大小限制(超过大小启用)
@@ -686,9 +669,9 @@ public:
 
     std::string getSk(const std::string &ak) const { return (_accessKey == ak) ? _secretKey : ""; }
 
-    void setSSLCtx(const shared_ptr<TC_OpenSSL::CTX> &ctx) { _ctx = ctx; }
-
-    shared_ptr<TC_OpenSSL::CTX> getSSLCtx() { return _ctx; };
+//    void setSSLCtx(const shared_ptr<TC_OpenSSL::CTX> &ctx) { _ctx = ctx; }
+//
+//    shared_ptr<TC_OpenSSL::CTX> getSSLCtx() { return _ctx; };
 
 private:
     /**
@@ -708,6 +691,7 @@ public:
 
 protected:
     friend class TC_EpollServer;
+    friend class Connection;
 
     /**
      * 加锁
@@ -881,7 +865,7 @@ protected:
     /**
      * ssl ctx
      */
-    shared_ptr<TC_OpenSSL::CTX> _ctx;
+//    shared_ptr<TC_OpenSSL::CTX> _ctx;
 
     //连接关闭的回调函数
     //Callback function with connection closed
