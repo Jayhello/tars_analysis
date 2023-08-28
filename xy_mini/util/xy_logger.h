@@ -828,7 +828,7 @@ protected:
             n += snprintf(c + n, len - n, szFormat,
                           tt.tm_year + 1900, tt.tm_mon + 1, tt.tm_mday, tt.tm_hour, tt.tm_min, tt.tm_sec,
                           duration_in_ms % 1000, _sSepar.c_str());
-        } else if (hasFlag(TC_Logger::HAS_TIME)) {
+        } else if (hasFlag( TC_Logger::HAS_TIME)) {
             time_t t = TNOW;//std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 
             tm tt;

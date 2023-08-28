@@ -5,6 +5,7 @@
 #include "xy_clientsocket.h"
 #include <cerrno>
 #include <iostream>
+#include "util/logging.h"
 
 namespace xy {
 
@@ -229,9 +230,11 @@ void TC_ClientSocket::close() {
 
 int TC_TCPClient::checkSocket() {
     if (!_socket.isValid()) {
+        ScopeLog Log;
         try {
 #if TARGET_PLATFORM_LINUX || TARGET_PLATFORM_IOS
             _socket.createSocket(SOCK_STREAM, _port ? (_isIPv6 ? AF_INET6 : AF_INET) : AF_LOCAL);
+            Log << "create_socket_fd" << _socket.getfd();
 #else
             _socket.createSocket(SOCK_STREAM, _isIPv6 ? AF_INET6 : AF_INET);
 #endif
@@ -254,15 +257,20 @@ int TC_TCPClient::checkSocket() {
                 iRet = _socket.connectNoThrow(_ip, _port);
             }
 
+            Log << "connect_ret" << iRet;
             if (iRet < 0 && !TC_Socket::isInProgress()) {
+                Log << "fail";
                 _socket.close();
                 return EM_CONNECT;
             }
             int iRetCode = _epoller->wait(_timeout);
+            Log << "epoll_wait_ret" << iRetCode;
             if (iRetCode < 0) {
+                Log << "fail_close";
                 _socket.close();
                 return EM_SELECT;
             } else if (iRetCode == 0) {
+                Log << "timeout_close";
                 _socket.close();
                 return EM_TIMEOUT;
             } else {
@@ -270,6 +278,7 @@ int TC_TCPClient::checkSocket() {
                 for (int i = 0; i < iRetCode; ++i) {
                     const epoll_event &ev = _epoller->get(i);
                     if (TC_Epoller::errorEvent(ev)) {
+                        Log << "err_event_close";
                         _socket.close();
                         return EM_CONNECT;
                     } else {
@@ -286,6 +295,7 @@ int TC_TCPClient::checkSocket() {
             }
             //设置为阻塞模式
             _socket.setblock(true);
+            Log << "succ";
         }
         catch (TC_Socket_Exception &ex) {
             _socket.close();
@@ -311,7 +321,9 @@ int TC_TCPClient::send(const char *sSendBuffer, size_t iSendLen) {
 }
 
 int TC_TCPClient::recv(char *sRecvBuffer, size_t &iRecvLen) {
+    ScopeLog Log;
     int iRet = checkSocket();
+    Log << "check_ret" << iRet;
     if (iRet < 0) {
         return iRet;
     }
@@ -319,17 +331,21 @@ int TC_TCPClient::recv(char *sRecvBuffer, size_t &iRecvLen) {
     _epoller->mod(_socket.getfd(), 0, EPOLLIN);
 
     int iRetCode = _epoller->wait(_timeout);
+    Log << "wait_ret" << iRetCode;
 
     if (iRetCode < 0) {
+        Log << "fail_close";
         _socket.close();
         return EM_SELECT;
     } else if (iRetCode == 0) {
+        Log << "timeout_close";
         _socket.close();
         return EM_TIMEOUT;
     }
 
     const epoll_event &ev = _epoller->get(0);
     if (TC_Epoller::errorEvent(ev)) {
+        Log << "err_event_close";
         _socket.close();
         return EM_CLOSE;
     }
@@ -340,10 +356,13 @@ int TC_TCPClient::recv(char *sRecvBuffer, size_t &iRecvLen) {
 #endif
     {
         int iLen = _socket.recv((void *) sRecvBuffer, iRecvLen);
+        Log << "recv_len" << iLen;
         if (iLen < 0) {
+            Log << "fail_close";
             _socket.close();
             return EM_RECV;
         } else if (iLen == 0) {
+            Log << "close";
             _socket.close();
             return EM_CLOSE;
         }

@@ -23,4 +23,6 @@ void test_cas_queue();
 
 void test_logger();
 
+void test_logging();
+
 }// xy

@@ -15,6 +15,7 @@
 #include "util/xy_file.h"
 #include "util/xy_cas_queue.h"
 #include "util/xy_logger.h"
+#include "util/logging.h"
 
 int main() {
 //    xy::test_exception();
@@ -25,7 +26,8 @@ int main() {
 //    xy::test_spin_lock();
 //    xy::test_file();
 //    xy::test_cas_queue();
-    xy::test_logger();
+//    xy::test_logger();
+    xy::test_logging();
 
     return 0;
 }
@@ -143,6 +145,14 @@ void test_logger(){
     g_logger.setupThread(&g_group);
 
     g_logger.debug() << "start test: " << std::this_thread::get_id() << endl;
+}
+
+void test_logging(){
+    Info("this is test...");
+
+    ScopeLog Log;
+    Log << "first";
+    Log << 1;
 }
 
 }// xy

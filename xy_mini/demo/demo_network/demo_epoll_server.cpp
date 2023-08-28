@@ -7,6 +7,7 @@
 #include "network/xy_http.h"
 #include "network/xy_epoll_server.h"
 #include "util/xy_common.h"
+#include "util/logging.h"
 
 int main() {
     xy::test_epoll_server();
@@ -108,12 +109,14 @@ class SocketHandle : public Handle {
 public:
     virtual void initialize() {
         g_logger.debug() << "SocketHandle::initialize: " << std::this_thread::get_id() << endl;
-        cout << "SocketHandle::initialize: " << std::this_thread::get_id() << endl;
+//        cout << "SocketHandle::initialize: " << std::this_thread::get_id() << endl;
+        Info("SocketHandle::initialize");
     }
     virtual void handle(const shared_ptr<RecvContext> &data) {
+        ScopeLog Log;
         try {
-            cout << "SocketHandle::handle : " << data->ip() << ":" << data->port() << endl;
-            cout << "recv_data: " << data->buffer().data() << endl;
+            Log << "SocketHandle::handle : " << data->ip() << ":" << data->port()<< "recv_data: " << data->buffer().data();
+//            Info("SocketHandle::handle ip: %s, port: %d, recv_data: %s", data->ip().c_str(), data->port(), data->buffer().data());
 
             shared_ptr<SendContext> send = data->createSendContext();
             send->buffer()->setBuffer(data->buffer());
@@ -121,17 +124,23 @@ public:
 
         }
         catch (exception &ex) {
-            g_logger.error() << "SocketHandle::handle ex:" << ex.what() << endl;
+//            g_logger.error() << "SocketHandle::handle ex:" << ex.what() << endl;
+            Log  << "SocketHandle::handle ex:" << ex.what();
+
             close(data);
         }
     }
     virtual void handleClose(const shared_ptr<RecvContext> &data) {
+        ScopeLog Log;
+        Log << __FUNCTION__;
         try {
 
-            g_logger.debug() << "SocketHandle::handleClose : " << data->ip() << ":" << data->port();
+//            g_logger.debug() << "SocketHandle::handleClose : " << data->ip() << ":" << data->port();
+            Log << "SocketHandle::handleClose : " << data->ip() << ":" << data->port();
         }
         catch (exception &ex) {
-            g_logger.error() << "SocketHandle::handle ex:" << ex.what() << endl;
+//            g_logger.error() << "SocketHandle::handle ex:" << ex.what() << endl;
+            Log << "SocketHandle::handle ex:" << ex.what();
             close(data);
         }
     }
@@ -154,7 +163,7 @@ public:
 
         g_logger.init("./debug", 1024 * 1024, 10);
         g_logger.modFlag(TC_RollLogger::HAS_LEVEL | TC_RollLogger::HAS_PID, true);
-        g_logger.setLogLevel(1);
+        g_logger.setLogLevel(5);
         g_logger.setupThread(&g_group);
 
         _epollServer->setLocalLogger(&g_logger);

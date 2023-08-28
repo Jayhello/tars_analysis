@@ -6,6 +6,7 @@
 #include "xy_bind_adapter.h"
 #include "xy_handle.h"
 #include "xy_epoll_server.h"
+#include "util/logging.h"
 
 namespace xy {
 
@@ -295,6 +296,7 @@ int Connection::sendBuffer() {
         pair<const char *, size_t> data = _sendBuffer.getBufferPointer();
 
         int iBytesSent = _sock.send((const void *) data.first, data.second);
+//        Info("send_ret: %d", iBytesSent);
         // }
         // else
         // {

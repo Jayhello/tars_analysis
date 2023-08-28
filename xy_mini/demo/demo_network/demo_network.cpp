@@ -9,6 +9,7 @@
 #include "network/xy_http.h"
 #include "util/xy_common.h"
 #include "util/xy_logger.h"
+#include "util/logging.h"
 
 int main(){
 //    xy::test_scoket();
@@ -88,13 +89,17 @@ void test_client_scoket(){
     int ret = 0;
     try{
         TC_TCPClient client("0.0.0.0", 8084, 2000);
+
         ret = client.send("abcd", 4);
+        Info("send ret: %d", ret);
 
-        std::size_t len = 0;
-        string sData(100, '\0');
-        ret = client.recv(&sData[0], len);
-        cout << "recv_ret: " << ret << ", len: " << len << ", data: " << sData << endl;
+        std::size_t len = 1024;
+        char arr[1024]= {0};
+        ret = client.recv(arr, len);
+//        cout << "recv_ret: " << ret << ", len: " << len << ", data: " << sData << endl;
+        Info("recv ret: %d, size: %d, msg: %s", ret, int(len), arr);
 
+        client.close();
     } catch (exception &ex) {
         cout << "client_ex: " << ex.what() << endl;
     }
