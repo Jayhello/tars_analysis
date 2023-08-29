@@ -179,7 +179,7 @@ public:
         //设置最大连接数
         lsPtr->setMaxConns(1024);
         //设置启动线程数
-        lsPtr->setHandle<HttpHandle>(5);
+        lsPtr->setHandle<HttpHandle>(2);
         //设置协议解析器
         lsPtr->setProtocol(TC_NetWorkBuffer::parseHttp);
         //设置逻辑处理器
@@ -201,7 +201,7 @@ public:
         //设置最大连接数
         lsPtr->setMaxConns(10240);
         //设置启动线程数
-        lsPtr->setHandle<SocketHandle>(1);
+        lsPtr->setHandle<SocketHandle>(2);
         //设置协议解析器
         lsPtr->setProtocol(parseEcho);
         //		lsPtr->enableQueueMode();
