@@ -1,0 +1,51 @@
+<tars>
+  <application>
+    enableset=n
+    setdivision=NULL
+    <server>
+      node=tars.tarsnode.ServerObj@tcp -h 10.33.75.43 -p 19386 -t 60000
+      app=TestApp
+      server=HelloServer
+      localip=10.33.75.43
+      local=tcp -h 127.0.0.1 -p 8999 -t 3000
+      basepath=/mnt/e/learn_code/tars_example/cmake-build-debug/hello_demo/
+      datapath=/mnt/e/learn_code/tars_example/hello_demo/config/data/
+      logpath=/usr/local/app/tars/app_log/
+      logsize=10M
+      lognum=10
+      logLevel=DEBUG
+      config=tars.tarsconfig.ConfigObj
+      notify=tars.tarsnotify.NotifyObj
+      log=tars.tarslog.LogObj
+      deactivating-timeout=3000
+      activating-timeout=10000
+      opencoroutine=0
+      coroutinememsize=1G
+      coroutinestack=128K
+      closecout=0
+      netthread=1
+      <TestApp.HelloServer.HelloObjAdapter>
+        allow
+        endpoint=tcp -h 10.33.75.43 -p 8999 -t 60000
+        handlegroup=TestApp.HelloServer.HelloObjAdapter
+        maxconns=100000
+        protocol=tars
+        queuecap=50000
+        queuetimeout=20000
+        servant=TestApp.HelloServer.HelloObj
+        threads=5
+      </TestApp.HelloServer.HelloObjAdapter>
+    </server>
+    <client>
+      locator=tars.tarsregistry.QueryObj@tcp -h 10.33.75.43 -p 17890
+      sync-invoke-timeout=3000
+      async-invoke-timeout=5000
+      refresh-endpoint-interval=60000
+      stat=tars.tarsstat.StatObj
+      property=tars.tarsproperty.PropertyObj
+      report-interval=60000
+      asyncthread=3
+      modulename=TestApp.HelloServer
+    </client>
+  </application>
+</tars>
