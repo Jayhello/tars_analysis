@@ -1,0 +1,25 @@
+
+module TestApp{
+
+struct SearchReq{
+    1 optional string query;
+    2 optional int seq;
+};
+
+struct SearchResp{
+    1 optional string result;
+};
+
+    struct PidHistoryTreasurePlanInfo
+    {
+        0 optional long     		  lHisTotal;    // 数据中心主播月初到昨天的total消费(单位分)
+        1 optional map<string, long>  mDayTotal;    // 20220911:110, 20220912:120 主播每天的消费
+    };
+
+interface Hello{
+    int hello(string req, out string resp);
+
+    int search(SearchReq req, out SearchResp resp);
+};
+
+};

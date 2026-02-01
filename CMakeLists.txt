@@ -52,6 +52,8 @@ add_subdirectory(servant)
 
 add_subdirectory(xy_mini)
 
+add_subdirectory(examples/hello_demo)
+
 IF (NOT ${ONLY_LIB})
 add_subdirectory(examples)
 add_subdirectory(unit-test)

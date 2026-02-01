@@ -1,0 +1,9 @@
+
+module Base{
+
+struct BaseInfo{
+    1 optional string name;
+    2 optional int id;
+};
+
+};
