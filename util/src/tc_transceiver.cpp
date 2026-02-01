@@ -276,8 +276,8 @@ void TC_Transceiver::checkConnect()
 	if (isConnecting())
 	{
 		int iVal = 0;
-		SOCKET_LEN_TYPE iLen = static_cast<SOCKET_LEN_TYPE>(sizeof(int));
-		int ret = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&iVal), &iLen);
+        SOCKET_LEN_TYPE iLen = static_cast<SOCKET_LEN_TYPE>(sizeof(int));
+        int ret = ::getsockopt(_fd, SOL_SOCKET, SO_ERROR, reinterpret_cast<char*>(&iVal), &iLen);
 
 		if (ret < 0 || iVal)
 		{

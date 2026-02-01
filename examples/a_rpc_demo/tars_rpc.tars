@@ -1,0 +1,19 @@
+
+module TestApp{
+
+struct SearchReq{
+    1 optional string query;
+    2 optional int seq;
+};
+
+struct SearchResp{
+    1 optional string result;
+};
+
+interface Hello{
+    int hello(string req, out string resp);
+
+    int search(SearchReq req, out SearchResp resp);
+};
+
+};
